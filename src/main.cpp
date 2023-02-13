@@ -48,6 +48,7 @@ String notContained = "";
 int lineIndex = -1;
 char table[6][5];
 char state[6][5];
+boolean gameFinished = false;
 
 // Keyboard tops
 char keyLine1[] = "QWERTYUIOP";
@@ -185,7 +186,7 @@ void loop()
       }
 
       // keyboard-touch detection
-      if (lineIndex > 5)
+      if (gameFinished || lineIndex > 5)
         return;
       int keyboardY = margin + buttonHeight + margin + cellHeight * 6;
       if (fingerItem.y > keyboardY && fingerItem.y < (keyboardY + keyHeight))
@@ -432,10 +433,12 @@ void updateAllScreen()
   screenCanvas.setTextSize(keyFontSize);
   if (hitCount == 5)
   { // Correct answer
+    gameFinished = true;
     screenCanvas.drawString("Correct!", margin, y);
   }
   else if (lineIndex > 5)
   { // Failed 6 times
+    gameFinished = true;
     screenCanvas.drawString("Failed! It was " + answer, margin, y);
   }
 
@@ -688,6 +691,7 @@ void startNewGame()
   notContained = "";
   inputLine = "";
   lineIndex = 0;
+  gameFinished = false;
 
   //load all words from "words.txt" in SD card
   if (SD.exists("/words.txt"))
