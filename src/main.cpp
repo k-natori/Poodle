@@ -31,7 +31,7 @@ int keyFontSize = 3;
 M5EPD_Canvas screenCanvas(&M5.EPD);
 M5EPD_Canvas buttonCanvas(&M5.EPD);
 M5EPD_Canvas lineCanvas(&M5.EPD);
-M5EPD_Canvas keyCanvas(&M5.EPD);
+// M5EPD_Canvas keyCanvas(&M5.EPD);
 M5EPD_Canvas keyboardCanvas(&M5.EPD);
 tp_finger_t lastFingerItem;
 
@@ -106,8 +106,8 @@ void setup()
   buttonCanvas.createCanvas(cellWidth, buttonHeight);
   buttonCanvas.fillCanvas(blackColor);
   lineCanvas.createCanvas(cellWidth * 5, cellHeight);
-  keyCanvas.createCanvas(keyWidth, keyHeight);
-  keyCanvas.fillCanvas(blackColor);
+  // keyCanvas.createCanvas(keyWidth, keyHeight);
+  // keyCanvas.fillCanvas(blackColor);
   widthCanvas.createCanvas(cellWidth, cellHeight);
 
   // If font file exists in SD card, load the font
@@ -233,7 +233,16 @@ void loop()
 void keyPushed(int keyboardX, int keyboardY, char key)
 {
   Serial.println(key);
-  keyCanvas.pushCanvas(keyboardX, keyboardY, UPDATE_MODE_DU);
+  //keyCanvas.pushCanvas(keyboardX, keyboardY, UPDATE_MODE_DU);
+  keyboardCanvas.ReversePartColor(keyboardX - margin + 1, keyboardY - (margin + buttonHeight + margin + cellHeight * 6) + 1, keyWidth - 2, keyHeight - 2);
+  keyboardCanvas.pushCanvas(margin, margin + buttonHeight + margin + cellHeight * 6, UPDATE_MODE_NONE);
+  M5.EPD.UpdateArea(keyboardX + 1, keyboardY + 1, keyWidth - 2, keyHeight - 2, UPDATE_MODE_DU);
+
+
+  delay(200);
+  keyboardCanvas.ReversePartColor(keyboardX - margin + 1, keyboardY - (margin + buttonHeight + margin + cellHeight * 6) + 1, keyWidth - 2, keyHeight - 2);
+  keyboardCanvas.pushCanvas(margin, margin + buttonHeight + margin + cellHeight * 6, UPDATE_MODE_NONE);
+  M5.EPD.UpdateArea(keyboardX + 1, keyboardY + 1, keyWidth - 2, keyHeight - 2, UPDATE_MODE_DU4);
 
   if (key == '=')
   { // if 5 letters in input line, check if the word exists
@@ -262,8 +271,6 @@ void keyPushed(int keyboardX, int keyboardY, char key)
     inputLine += String(key);
     updateInputLineArea();
   }
-  delay(200);
-  keyboardCanvas.pushCanvas(margin, margin + buttonHeight + margin + cellHeight * 6, UPDATE_MODE_DU4);
 }
 
 // check if the word exists and put it into last line
