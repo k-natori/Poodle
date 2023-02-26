@@ -78,7 +78,7 @@ int stringWidth(String string, int fontSize);
 int cellFontHeight();
 int keyFontHeight();
 int batteryPercent();
-void savePGM(M5EPD_Canvas targetCanvas);
+void savePGM(M5EPD_Canvas &canvas);
 
 // Load and save state
 void loadState();
@@ -559,7 +559,7 @@ int batteryPercent()
 }
 
 // Save canvas content as PGM file
-void savePGM(M5EPD_Canvas canvas)
+void savePGM(M5EPD_Canvas &canvas)
 {
   uint32_t bufferSize = canvas.getBufferSize();
   uint8_t *buffer = (uint8_t *)(canvas.frameBuffer(1));
